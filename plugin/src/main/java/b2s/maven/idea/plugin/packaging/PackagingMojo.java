@@ -45,15 +45,6 @@ public class PackagingMojo extends AbstractMojo {
 
         buildPluginBundle(pluginJar);
 
-
-        try {
-            for (String pathElements : project.getRuntimeClasspathElements()) {
-                System.out.println("pathElements = " + pathElements);
-            }
-        } catch (DependencyResolutionRequiredException e) {
-            e.printStackTrace();
-        }
-
         if (deletePluginJar) {
             pluginJar.delete();
         }
@@ -65,8 +56,31 @@ public class PackagingMojo extends AbstractMojo {
 
     private void buildPluginBundle(File pluginJar) {
         ZipBuilder zipBuilder = new ZipBuilder(buildDir);
-        zipBuilder.withEntry("lib/" + pluginJar.getName(), inputStreamFor(pluginJar));
+        addToBundle(pluginJar, zipBuilder);
+        addDependenciesToBundle(zipBuilder);
         zipBuilder.build(zipName + ".zip");
+    }
+
+    private void addDependenciesToBundle(ZipBuilder zipBuilder) {
+        try {
+            for (String classPathElement : project.getRuntimeClasspathElements()) {
+                if (isOutputDirectory(classPathElement)) {
+                    continue;
+                }
+
+                addToBundle(new File(classPathElement), zipBuilder);
+            }
+        } catch (DependencyResolutionRequiredException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private boolean isOutputDirectory(String path) {
+        return buildOutputDir.getAbsolutePath().equals(path);
+    }
+
+    private void addToBundle(File jarFile, ZipBuilder zipBuilder) {
+        zipBuilder.withEntry("lib/" + jarFile.getName(), inputStreamFor(jarFile));
     }
 
     private File buildPluginJarFile() {

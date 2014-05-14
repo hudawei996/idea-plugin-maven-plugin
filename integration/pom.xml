@@ -43,7 +43,12 @@
 
         <plugins>
             <plugin>
-                <groupId>${project.parent.groupId}</groupId>
+                <groupId>com.mycila.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+            <groupId>${project.parent.groupId}</groupId>
                 <artifactId>idea-plugin-maven-plugin</artifactId>
                 <version>${project.parent.version}</version>
                 <extensions>true</extensions>

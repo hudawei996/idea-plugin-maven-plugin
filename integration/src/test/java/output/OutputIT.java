@@ -35,8 +35,8 @@ public class OutputIT {
     public void shouldEnsureThePluginBundleIsBuiltWithTheExpectedContents() {
         File zip = pluginBundle();
 
-        AssertZip.assertEntryExists("lib/idea-plugin-integration.jar", zip);
-        AssertZip.assertEntryExists("lib/junit-4.11.jar", zip);
+        AssertZip.assertEntryExists("idea-plugin-integration/lib/idea-plugin-integration.jar", zip);
+        AssertZip.assertEntryExists("idea-plugin-integration/lib/junit-4.11.jar", zip);
     }
 
     private File pluginBundle() {

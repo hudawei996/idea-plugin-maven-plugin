@@ -11,7 +11,7 @@
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-package b2s.maven.idea.plugin.packaging;
+package com.github.born2snipe.maven.plugin.idea.packaging;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
@@ -62,13 +62,25 @@ public class PackagingMojoTest {
     }
 
     @Test
+    public void shouldAlwaysAddAManifestFileToThePluginsJar() {
+        mojo.setDeletePluginJar(false);
+        addFileToProjectOutput("1.class");
+
+        runMojo();
+
+        String expectedContents = "Manifest-Version: 1.0\n" +
+                "Created-By: IntelliJ IDEA\n";
+        AssertZip.assertEntry("META-INF/MANIFEST.MF", expectedContents, pluginJar());
+    }
+
+    @Test
     public void shouldAddTheRuntimeDependenciesToThePluginBundle() {
         addFileToProjectOutput("1.class");
         addProjectDependency("commons-io:commons-io:1.2");
 
         runMojo();
 
-        AssertZip.assertEntryExists("lib/commons-io-1.2.jar", pluginBundle());
+        AssertZip.assertEntryExists("plugin-name/lib/commons-io-1.2.jar", pluginBundle());
     }
 
     @Test
@@ -95,7 +107,7 @@ public class PackagingMojoTest {
 
         runMojo();
 
-        AssertZip.assertEntryExists("lib/plugin-name.jar", pluginBundle());
+        AssertZip.assertEntryExists("plugin-name/lib/plugin-name.jar", pluginBundle());
     }
 
     @Test

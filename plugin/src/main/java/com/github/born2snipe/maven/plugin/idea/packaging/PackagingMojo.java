@@ -11,7 +11,7 @@
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-package b2s.maven.idea.plugin.packaging;
+package com.github.born2snipe.maven.plugin.idea.packaging;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
@@ -50,6 +50,7 @@ public class PackagingMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+        long start = System.currentTimeMillis();
         if (doesBuildDirectoryNotExist()) {
             return;
         }
@@ -61,6 +62,8 @@ public class PackagingMojo extends AbstractMojo {
         if (deletePluginJar) {
             pluginJar.delete();
         }
+
+        getLog().info("Packaged plugin in " + (System.currentTimeMillis() - start) + " millis");
     }
 
     private boolean doesBuildDirectoryNotExist() {
@@ -93,7 +96,7 @@ public class PackagingMojo extends AbstractMojo {
     }
 
     private void addToBundle(File jarFile, ZipBuilder zipBuilder) {
-        zipBuilder.withEntry("lib/" + jarFile.getName(), inputStreamFor(jarFile));
+        zipBuilder.withEntry(pluginName + "/lib/" + jarFile.getName(), inputStreamFor(jarFile));
     }
 
     private File buildPluginJarFile() {
@@ -105,7 +108,8 @@ public class PackagingMojo extends AbstractMojo {
             String entry = convertToEntryPath(file);
             zipBuilder.withEntry(entry, inputStreamFor(file));
         }
-
+        zipBuilder.withEntry("META-INF/MANIFEST.MF", "Manifest-Version: 1.0\n" +
+                "Created-By: IntelliJ IDEA\n");
         return zipBuilder.build(pluginName + ".jar");
     }
 

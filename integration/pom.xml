@@ -7,7 +7,7 @@
         <groupId>com.github.born2snipe</groupId>
         <artifactId>idea-plugin-aggregate</artifactId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../parent.xml</relativePath>
     </parent>
 
     <artifactId>idea-plugin-integration</artifactId>

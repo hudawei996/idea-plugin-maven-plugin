@@ -36,7 +36,7 @@ import java.util.Iterator;
 public class CopyPluginToPluginSandboxMojo extends AbstractMojo {
     @Parameter(required = true, readonly = true, property = "project")
     private MavenProject project;
-    @Parameter(defaultValue = "${user.home}/Library/Caches/IntelliJIdea13")
+    @Parameter(required = true, defaultValue = "${user.home}/Library/Caches/IntelliJIdea13")
     private File ideaCacheDirectory;
 
     @Override

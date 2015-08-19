@@ -48,10 +48,23 @@
             </plugin>
 
             <plugin>
-            <groupId>${project.parent.groupId}</groupId>
+                <groupId>${project.parent.groupId}</groupId>
                 <artifactId>idea-plugin-maven-plugin</artifactId>
                 <version>${project.parent.version}</version>
                 <extensions>true</extensions>
+                <configuration>
+                    <ideaVersion>14</ideaVersion>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>clean-plugin-sandbox</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>copy-plugin-to-sandbox</goal>
+                            <goal>delete-plugin-from-sandbox</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>

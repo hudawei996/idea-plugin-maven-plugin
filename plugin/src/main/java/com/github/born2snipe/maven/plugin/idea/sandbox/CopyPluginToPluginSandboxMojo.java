@@ -16,13 +16,10 @@ package com.github.born2snipe.maven.plugin.idea.sandbox;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,15 +30,7 @@ import java.io.OutputStream;
 import java.util.Iterator;
 
 @Mojo(name = "copy-plugin-to-sandbox", requiresProject = true, requiresDependencyResolution = ResolutionScope.RUNTIME)
-public class CopyPluginToPluginSandboxMojo extends AbstractMojo {
-    @Parameter(required = true, readonly = true, property = "project")
-    private MavenProject project;
-    @Parameter(required = true, defaultValue = "14")
-    private String ideaVersion;
-    @Parameter
-    private File ideaDirectory;
-    private IdeaPluginSandboxLocator sandboxLocator = new IdeaPluginSandboxLocator();
-
+public class CopyPluginToPluginSandboxMojo extends BaseSandboxMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info("Sandbox directory: " + projectSandboxDirectory());
@@ -123,23 +112,4 @@ public class CopyPluginToPluginSandboxMojo extends AbstractMojo {
         return directory;
     }
 
-    private File projectSandboxDirectory() {
-        return new File(pluginsSandboxDirectory(), project.getName());
-    }
-
-    private File pluginsSandboxDirectory() {
-        return sandboxLocator.locate(ideaDirectory, ideaVersion);
-    }
-
-    public void setProject(MavenProject project) {
-        this.project = project;
-    }
-
-    public void setIdeaVersion(String ideaVersion) {
-        this.ideaVersion = ideaVersion;
-    }
-
-    public void setIdeaDirectory(File ideaDirectory) {
-        this.ideaDirectory = ideaDirectory;
-    }
 }

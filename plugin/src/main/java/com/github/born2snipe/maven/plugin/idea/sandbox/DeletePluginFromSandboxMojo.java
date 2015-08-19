@@ -14,26 +14,15 @@
 package com.github.born2snipe.maven.plugin.idea.sandbox;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.io.IOException;
 
 @Mojo(name = "delete-plugin-from-sandbox", requiresProject = true)
-public class DeletePluginFromSandboxMojo extends AbstractMojo {
-    @Parameter(required = true, readonly = true, property = "project")
-    private MavenProject project;
-    @Parameter(required = true, defaultValue = "14")
-    private String ideaVersion;
-    @Parameter
-    private File ideaDirectory;
-    private IdeaPluginSandboxLocator sandboxLocator = new IdeaPluginSandboxLocator();
-
+public class DeletePluginFromSandboxMojo extends BaseSandboxMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
@@ -47,25 +36,5 @@ public class DeletePluginFromSandboxMojo extends AbstractMojo {
         } catch (IOException e) {
             throw new MojoExecutionException("A problem occurred when attempting to delete the old sandboxed plugin", e);
         }
-    }
-
-    private File projectSandboxDirectory() {
-        return new File(pluginsSandboxDirectory(), project.getName());
-    }
-
-    private File pluginsSandboxDirectory() {
-        return sandboxLocator.locate(ideaDirectory, ideaVersion);
-    }
-
-    public void setProject(MavenProject project) {
-        this.project = project;
-    }
-
-    public void setIdeaVersion(String ideaVersion) {
-        this.ideaVersion = ideaVersion;
-    }
-
-    public void setIdeaDirectory(File ideaDirectory) {
-        this.ideaDirectory = ideaDirectory;
     }
 }

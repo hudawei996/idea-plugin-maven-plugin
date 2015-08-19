@@ -14,7 +14,6 @@
 package com.github.born2snipe.maven.plugin.idea;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
 import org.apache.maven.model.Build;
@@ -48,7 +47,7 @@ public abstract class BaseMojoTestCase {
 
         mavenProject = new MavenProject();
         mavenProject.setName("plugin-name");
-        mavenProject.setArtifacts(new HashSet<Artifact>());
+        mavenProject.setArtifacts(new HashSet<>());
         mavenProject.setBuild(build);
     }
 

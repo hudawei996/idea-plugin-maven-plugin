@@ -28,7 +28,8 @@ public class CopyPluginToPluginSandboxMojoTest extends BaseSandboxMojoTestCase {
     public void setUp() throws Exception {
         mojo = new CopyPluginToPluginSandboxMojo();
         mojo.setProject(mavenProject);
-        mojo.setIdeaCacheDirectory(intellijCache);
+        mojo.setIdeaVersion(IDEA_VERSION);
+        mojo.setIdeaDirectory(ideaRootDir);
 
         addFileToProjectOutput("META-INF/plugin.xml");
     }

@@ -28,8 +28,11 @@ import java.io.IOException;
 public class DeletePluginFromSandboxMojo extends AbstractMojo {
     @Parameter(required = true, readonly = true, property = "project")
     private MavenProject project;
-    @Parameter(required = true, defaultValue = "${user.home}/Library/Caches/IntelliJIdea13")
-    private File ideaCacheDirectory;
+    @Parameter(required = true, defaultValue = "14")
+    private String ideaVersion;
+    @Parameter
+    private File ideaDirectory;
+    private IdeaPluginSandboxLocator sandboxLocator = new IdeaPluginSandboxLocator();
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -51,14 +54,18 @@ public class DeletePluginFromSandboxMojo extends AbstractMojo {
     }
 
     private File pluginsSandboxDirectory() {
-        return new File(ideaCacheDirectory, "plugins-sandbox/plugins");
+        return sandboxLocator.locate(ideaDirectory, ideaVersion);
     }
 
     public void setProject(MavenProject project) {
         this.project = project;
     }
 
-    public void setIdeaCacheDirectory(File ideaCacheDirectory) {
-        this.ideaCacheDirectory = ideaCacheDirectory;
+    public void setIdeaVersion(String ideaVersion) {
+        this.ideaVersion = ideaVersion;
+    }
+
+    public void setIdeaDirectory(File ideaDirectory) {
+        this.ideaDirectory = ideaDirectory;
     }
 }

@@ -14,17 +14,33 @@
 package com.github.born2snipe.maven.plugin.idea.sandbox;
 
 import com.github.born2snipe.maven.plugin.idea.BaseMojoTestCase;
+import org.junit.AfterClass;
 import org.junit.Before;
 
 import java.io.File;
 
 public abstract class BaseSandboxMojoTestCase extends BaseMojoTestCase {
+    protected static final String IDEA_VERSION = "13";
+    private static final String ORIGINAL_USER_HOME = System.getProperty("user.home");
     protected File pluginsSandboxDir;
     protected File intellijCache;
+    protected File ideaRootDir;
+    private File ideaProperties;
+
+    @AfterClass
+    public static void reset() {
+        System.setProperty("user.home", ORIGINAL_USER_HOME);
+    }
 
     @Before
     public void baseSandboxSetup() throws Exception {
-        intellijCache = temporaryFolder.newFolder("intellij-cache");
+        File userHome = temporaryFolder.newFolder("user-home");
+        System.setProperty("user.home", userHome.getAbsolutePath());
+
+        ideaRootDir = temporaryFolder.newFolder("idea-root");
+        setupIdeaProperties();
+
+        intellijCache = Env.current().getCacheDirectoryFor(IDEA_VERSION);
         pluginsSandboxDir = new File(intellijCache, "plugins-sandbox/plugins");
         pluginsSandboxDir.mkdirs();
     }
@@ -32,4 +48,12 @@ public abstract class BaseSandboxMojoTestCase extends BaseMojoTestCase {
     protected File projectSandboxDir() {
         return new File(pluginsSandboxDir, mavenProject.getName());
     }
+
+    private void setupIdeaProperties() {
+        File binDirectory = new File(ideaRootDir, "bin");
+        binDirectory.mkdirs();
+        ideaProperties = new File(binDirectory, "idea.properties");
+        writeFile(ideaProperties, "");
+    }
+
 }

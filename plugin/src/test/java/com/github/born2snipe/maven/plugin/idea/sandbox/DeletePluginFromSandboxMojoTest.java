@@ -28,7 +28,8 @@ public class DeletePluginFromSandboxMojoTest extends BaseSandboxMojoTestCase {
     public void setUp() throws Exception {
         mojo = new DeletePluginFromSandboxMojo();
         mojo.setProject(mavenProject);
-        mojo.setIdeaCacheDirectory(intellijCache);
+        mojo.setIdeaVersion("13");
+        mojo.setIdeaDirectory(ideaRootDir);
     }
 
     @Test
